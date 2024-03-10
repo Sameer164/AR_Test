@@ -13,28 +13,77 @@ function calculateDistance(o_lat, o_lng, d_lat, d_lng) {
 }
 
 
-function success(pos) {
+function displayAds(ads) {
+    // const ads_html_container = document.getElementById('ads-container');
+    // ads_html_container.innerHTML = '';
+    const scene = document.querySelector('a-scene');
+    ads.forEach(ad => {
+        const latitude = ad.location.lat;
+        const longitude = ad.location.lng;
+        const placeText = document.createElement('a-link');
+        placeText.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+        placeText.setAttribute('title', place.name);
+        placeText.setAttribute('scale', '3 3 3');
+        // const singleAdElement = document.createElement('div');
+        // singleAdElement.innerHTML = `<h3>${ad.name}</h3><p>${ad.details}</p>`;
+        // ads_html_container.appendChild(singleAdElement);
+        scene.appendChild(placeText);
+    })
+}
+
+async function fetchAdsFromServer(latitude, longitude) {
+    try{
+        const params = {
+            radius: 300,   
+            clientId: 'KDBHF2BWQCAH1H45CRSEB1VSIQF0II33AWIZAF13ZSVDILXH',
+            clientSecret: 'NK4BO1K4RCZIFCMUE35EDF5KQKTS4HEPI3B05MTNIL2CHAME',
+            version: '20300101', 
+        };
+        const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+
+        const endpoint = `${corsProxy}https://api.foursquare.com/v2/venues/search?intent=checkin
+        &ll=${latitude},${longitude}
+        &radius=${params.radius}
+        &client_id=${params.clientId}
+        &client_secret=${params.clientSecret}
+        &limit=30 
+        &v=${params.version}`;
+        
+        const ads = await fetch(endpoint);
+        const ads_json = await ads.json();
+        displayAds(ads_json.response().venues());
+    } catch (err) {
+        console.error("Ads not Available for Error Fetching Ads", err);
+    }
+}
+
+async function success(pos) {
     const crd = pos.coords;
 
     if (previousPos) {
         let distanceTravelled = calculateDistance(previousPos.latitude, previousPos.longitude, crd.latitude, crd.longitude);
         if (distanceTravelled >= 50) {
-            document.getElementById('distance-info').textContent = `User Moved approximately ${distanceTravelled.toFixed(2)} meters.`;
+            await fetchAdsFromServer(crd.latitude, crd.longitude);
+            previousPos = {latitude: crd.latitude, longitude: crd.longitude};
         }
+    } else {
         previousPos = {latitude: crd.latitude, longitude: crd.longitude};
-
+        await fetchAdsFromServer(crd.latitude, crd.longitude);
     }
+    
 }
 
 function error(err) {
-    document.getElementById('distance-info').textContent = "Error getting Location";
+    console.error("Error getting Location", err);
 }
+
 
 function getUserPositions() {
     if (navigator.geolocation) {
         navigator.geolocation.watchPosition(success, error, {enableHighAccuracy: true, maximumAge: 0, timeout: 27000});
     } else {
-        document.getElementById('distance-info').textContent = "Geolocation is not supported by this browser";
+        console.error("Geolocation is not supported by this browser", err);
     }
 }
 
+getUserPositions();
