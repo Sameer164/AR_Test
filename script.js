@@ -27,7 +27,7 @@ function displayAds(ads) {
             const aImage = document.createElement('a-image');
             aImage.setAttribute('src', `assets/${ad.name}.png`);
             aImage.setAttribute('look-at', '[gps-camera]');
-            aImage.setAttribute('scale', '1 1 1');
+            aImage.setAttribute('scale', '10 10 10');
             aImage.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
             scene.appendChild(aImage);
 
