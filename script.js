@@ -1,5 +1,6 @@
 const R = 6371e3;
 let previousPos = null;
+let timerId = null;
 
 function calculateDistance(o_lat, o_lng, d_lat, d_lng) {
     let o_alat = o_lat * Math.PI;
@@ -34,7 +35,7 @@ function displayAds(ads) {
 async function fetchAdsFromServer(latitude, longitude) {
     try{
         const params = {
-            radius: 300,   
+            radius: 100,   
             clientId: 'KDBHF2BWQCAH1H45CRSEB1VSIQF0II33AWIZAF13ZSVDILXH',
             clientSecret: 'NK4BO1K4RCZIFCMUE35EDF5KQKTS4HEPI3B05MTNIL2CHAME',
             version: '20300101', 
@@ -51,20 +52,22 @@ async function fetchAdsFromServer(latitude, longitude) {
         
         const ads = await fetch(endpoint);
         const ads_json = await ads.json();
+        console.log(ads_json);
         displayAds(ads_json.response().venues());
     } catch (err) {
         console.error("Ads not Available for Error Fetching Ads", err);
     }
 }
 
-async function success(pos) {
+async function success(pos, fromTimer = false) {
     const crd = pos.coords;
 
     if (previousPos) {
         let distanceTravelled = calculateDistance(previousPos.latitude, previousPos.longitude, crd.latitude, crd.longitude);
-        if (distanceTravelled >= 50) {
+        if (distanceTravelled >= 50 || fromTimer) {
             await fetchAdsFromServer(crd.latitude, crd.longitude);
             previousPos = {latitude: crd.latitude, longitude: crd.longitude};
+            resetTimer();
         }
     } else {
         previousPos = {latitude: crd.latitude, longitude: crd.longitude};
@@ -86,4 +89,14 @@ function getUserPositions() {
     }
 }
 
+function resetTimer() {
+    clearInterval(timerId);
+    timerId = setInterval(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(pos => success(pos, true), error);
+        }
+    }, 50000); 
+}
+
 getUserPositions();
+resetTimer();
