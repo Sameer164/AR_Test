@@ -2,6 +2,8 @@ const R = 6371e3;
 let previousPos = null;
 let timerId = null;
 
+const places = ["McDonald's", "Chipotle Mexican Grill", "Salt and Pepper Grill"]
+
 function calculateDistance(o_lat, o_lng, d_lat, d_lng) {
     let o_alat = o_lat * Math.PI;
     let d_alat = d_lat * Math.PI;
@@ -19,41 +21,51 @@ function displayAds(ads) {
     // ads_html_container.innerHTML = '';
     const scene = document.querySelector('a-scene');
     ads.forEach(ad => {
-        const latitude = ad.location.lat;
-        const longitude = ad.location.lng;
-        const placeText = document.createElement('a-link');
-        placeText.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-        placeText.setAttribute('title', place.name);
-        placeText.setAttribute('scale', '3 3 3');
-        // const singleAdElement = document.createElement('div');
-        // singleAdElement.innerHTML = `<h3>${ad.name}</h3><p>${ad.details}</p>`;
-        // ads_html_container.appendChild(singleAdElement);
-        scene.appendChild(placeText);
+        const latitude = ad.geocodes.roof.latitude;
+        const longitude = ad.geocodes.roof.longitude;
+        if (ad.name in places) {
+            const aImage = document.createElement('a-image');
+            aImage.setAttribute('src', `assets/${ad.name}.png`);
+            aImage.setAttribute('look-at', '[gps-camera]');
+            aImage.setAttribute('scale', '1 1 1');
+            aImage.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+            scene.appendChild(aImage);
+
+        } else {
+            const placeText = document.createElement('a-link');
+            placeText.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+            placeText.setAttribute('title', place.name);
+            placeText.setAttribute('scale', '3 3 3');
+            // const singleAdElement = document.createElement('div');
+            // singleAdElement.innerHTML = `<h3>${ad.name}</h3><p>${ad.details}</p>`;
+            // ads_html_container.appendChild(singleAdElement);
+            scene.appendChild(placeText);
+        }
     })
 }
 
 async function fetchAdsFromServer(latitude, longitude) {
     try{
         const params = {
+            query: 'food',
             radius: 100,   
-            clientId: 'KDBHF2BWQCAH1H45CRSEB1VSIQF0II33AWIZAF13ZSVDILXH',
-            clientSecret: 'NK4BO1K4RCZIFCMUE35EDF5KQKTS4HEPI3B05MTNIL2CHAME',
-            version: '20300101', 
+            ll: `${latitude},${longitude}`
         };
-        const corsProxy = 'https://cors-anywhere.herokuapp.com/';
 
-        const endpoint = `${corsProxy}https://api.foursquare.com/v2/venues/search?intent=checkin
-        &ll=${latitude},${longitude}
-        &radius=${params.radius}
-        &client_id=${params.clientId}
-        &client_secret=${params.clientSecret}
-        &limit=30 
-        &v=${params.version}`;
-        
-        const ads = await fetch(endpoint);
+        const searchParams = new URLSearchParams(params);
+        const ads = await fetch(
+            `https://api.foursquare.com/v3/places/search?${searchParams}`,
+            {
+              method: 'GET',
+              headers: {
+                Accept: 'application/json',
+                Authorization: 'fsq3SGuVS9Wyr9BMer8PHEu54D94HN4nOHDIvFX19Ty9r30=',
+              }
+            }
+          );
         const ads_json = await ads.json();
-        console.log(ads_json);
-        displayAds(ads_json.response().venues());
+        console.log(ads_json.results);
+        displayAds(ads_json.results);
     } catch (err) {
         console.error("Ads not Available for Error Fetching Ads", err);
     }
@@ -95,7 +107,7 @@ function resetTimer() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(pos => success(pos, true), error);
         }
-    }, 50000); 
+    }, 500000); 
 }
 
 getUserPositions();
