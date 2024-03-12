@@ -34,7 +34,7 @@ function displayAds(ads) {
         } else {
             const placeText = document.createElement('a-link');
             placeText.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-            placeText.setAttribute('title', place.name);
+            placeText.setAttribute('title', ad.name);
             placeText.setAttribute('scale', '3 3 3');
             // const singleAdElement = document.createElement('div');
             // singleAdElement.innerHTML = `<h3>${ad.name}</h3><p>${ad.details}</p>`;
