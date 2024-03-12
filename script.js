@@ -47,8 +47,8 @@ function displayAds(ads) {
 async function fetchAdsFromServer(latitude, longitude) {
     try{
         const params = {
-            query: 'food',
-            radius: 100,   
+            query: 'food school',
+            radius: 500,   
             ll: `${latitude},${longitude}`
         };
 
