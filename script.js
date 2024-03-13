@@ -50,7 +50,7 @@ function displayAds(ads) {
             // aImage.setAttribute('look-at', '[gps-camera]');
             // aImage.setAttribute('scale', '10 10 10');
             // aImage.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-            // scene.appendChild(aImage);
+            scene.appendChild(entity);
 
         } else {
             const placeText = document.createElement('a-link');
