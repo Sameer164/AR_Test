@@ -2,7 +2,7 @@ const R = 6371e3;
 let previousPos = null;
 let timerId = null;
 
-const places = ["McDonald's", "Chipotle Mexican Grill", "Salt and Pepper Grill"]
+const places = ["McKinley Technology High School", "McDonald's", "Chipotle Mexican Grill", "Salt and Pepper Grill"]
 
 function calculateDistance(o_lat, o_lng, d_lat, d_lng) {
     let o_alat = o_lat * Math.PI;
@@ -21,9 +21,10 @@ function displayAds(ads) {
     // ads_html_container.innerHTML = '';
     const scene = document.querySelector('a-scene');
     ads.forEach(ad => {
-        const latitude = ad.geocodes.roof.latitude;
-        const longitude = ad.geocodes.roof.longitude;
-        if (ad.name in places) {
+        const latitude = ad.geocodes.main.latitude;
+        const longitude = ad.geocodes.main.longitude;
+        if (places.includes(ad.name)) {
+            console.log("Printing an Image");
             const aImage = document.createElement('a-image');
             aImage.setAttribute('src', `assets/${ad.name}.png`);
             aImage.setAttribute('look-at', '[gps-camera]');
@@ -35,7 +36,7 @@ function displayAds(ads) {
             const placeText = document.createElement('a-link');
             placeText.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
             placeText.setAttribute('title', ad.name);
-            placeText.setAttribute('scale', '3 3 3');
+            placeText.setAttribute('scale', '1.5 1.5 1.5');
             // const singleAdElement = document.createElement('div');
             // singleAdElement.innerHTML = `<h3>${ad.name}</h3><p>${ad.details}</p>`;
             // ads_html_container.appendChild(singleAdElement);
@@ -47,7 +48,7 @@ function displayAds(ads) {
 async function fetchAdsFromServer(latitude, longitude) {
     try{
         const params = {
-            query: 'food school',
+            query: 'school',
             radius: 500,   
             ll: `${latitude},${longitude}`
         };
