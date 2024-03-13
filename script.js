@@ -40,7 +40,7 @@ function displayAds(ads) {
             const entity = document.createElement("a-entity");
             entity.setAttribute("class", "link");
             entity.setAttribute("geometry", "primitive: plane; height: 3; width: 4");
-            entity.setAttribute("material", "shader: flat; src: #mcdonalds");
+            entity.setAttribute("material", `shader: flat; src: #${sanitizedAdName}`);
             entity.setAttribute("rotation", "0 0 0");
             entity.setAttribute("scale", "0.3 0.3 0.3");
             entity.setAttribute("gps-entity-place", `longitude: ${longitude}; latitude: ${latitude};`);
