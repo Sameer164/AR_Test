@@ -28,8 +28,9 @@ function displayAds(ads) {
 
             var assets = document.getElementById("assets");
             var img = document.createElement("img");
-            img.setAttribute("id", `${ad.name}`);
             const sanitizedAdName = ad.name.replace(/'/g, "\\'");
+
+            img.setAttribute("id", `${sanitizedAdName}`);
 
             img.setAttribute("src", `assets/${sanitizedAdName}.png`);
             img.setAttribute("style", "height:20%; width:10%;");
