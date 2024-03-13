@@ -25,12 +25,32 @@ function displayAds(ads) {
         const longitude = ad.geocodes.main.longitude;
         if (places.includes(ad.name)) {
             console.log("Printing an Image");
-            const aImage = document.createElement('a-image');
-            aImage.setAttribute('src', `assets/${ad.name}.png`);
-            aImage.setAttribute('look-at', '[gps-camera]');
-            aImage.setAttribute('scale', '10 10 10');
-            aImage.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-            scene.appendChild(aImage);
+
+            var assets = document.getElementById("assets");
+            var img = document.createElement("img");
+            img.setAttribute("id", `${ad.name}`);
+            const sanitizedAdName = ad.name.replace(/'/g, "\\'");
+
+            img.setAttribute("src", `assets/${sanitizedAdName}.png`);
+            img.setAttribute("style", "height:20%; width:10%;");
+            
+            assets.appendChild(img);
+            
+            const entity = document.createElement("a-entity");
+            entity.setAttribute("class", "link");
+            entity.setAttribute("geometry", "primitive: plane; height: 3; width: 4");
+            entity.setAttribute("material", "shader: flat; src: #mcdonalds");
+            entity.setAttribute("rotation", "0 0 0");
+            entity.setAttribute("scale", "0.3 0.3 0.3");
+            entity.setAttribute("gps-entity-place", `longitude: ${longitude}; latitude: ${latitude};`);
+            entity.setAttribute("animation-mixer", "");
+            
+            // const aImage = document.createElement('a-image');
+            // aImage.setAttribute('src', `assets/${ad.name}.png`);
+            // aImage.setAttribute('look-at', '[gps-camera]');
+            // aImage.setAttribute('scale', '10 10 10');
+            // aImage.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+            // scene.appendChild(aImage);
 
         } else {
             const placeText = document.createElement('a-link');

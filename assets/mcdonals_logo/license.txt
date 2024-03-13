@@ -1,0 +1,11 @@
+Model Information:
+* title:	MCDONALS LOGO
+* source:	https://sketchfab.com/3d-models/mcdonals-logo-c9608bd960ac4a55a907d9e77f31e2aa
+* author:	Shahsunain (https://sketchfab.com/Shahsunain)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "MCDONALS LOGO" (https://sketchfab.com/3d-models/mcdonals-logo-c9608bd960ac4a55a907d9e77f31e2aa) by Shahsunain (https://sketchfab.com/Shahsunain) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)

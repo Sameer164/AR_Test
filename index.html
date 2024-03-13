@@ -18,7 +18,21 @@
 		embedded
         arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
         <a-camera gps-camera rotation-reader gpsMinDistance="5"></a-camera>
+
+        <a-assets id = "assets">
+            <img id="mcdonalds" src="assets/McDonald's.png" style="height:20%; width:10%;">
+        </a-assets>
+            
+        <a-entity class="link"
+        geometry="primitive: plane; height: 3; width: 4"
+        material="shader: flat; src: #mcdonalds"
+        rotation="0 0 0"
+        scale = "0.3 0.3 0.3"
+        gps-entity-place="longitude: -77.0071546; latitude: 38.9159926;" animation-mixer > </a-entity> 
+
+        <!-- <a-entity gltf-model="./assets/magnemite/scene.gltf" rotation="0 180 0" scale="0.15 0.15 0.15" gps-entity-place="longitude: -77.0071546; latitude: 38.9159926;" animation-mixer/> -->
+
 	</a-scene>
-    <script src="./script.js"></script>
+    <!-- <script src="./script.js"></script> -->
 
 </body>
