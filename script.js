@@ -46,11 +46,7 @@ function displayAds(ads) {
             entity.setAttribute("gps-entity-place", `longitude: ${longitude}; latitude: ${latitude};`);
             entity.setAttribute("animation-mixer", "");
             
-            // const aImage = document.createElement('a-image');
-            // aImage.setAttribute('src', `assets/${ad.name}.png`);
-            // aImage.setAttribute('look-at', '[gps-camera]');
-            // aImage.setAttribute('scale', '10 10 10');
-            // aImage.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+            console.log("Appending entity");
             scene.appendChild(entity);
 
         } else {
