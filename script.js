@@ -128,6 +128,6 @@ function resetTimer() {
     }, 500000); 
 }
 
-console.log("Hello!")
+// console.log("Hello!")
 getUserPositions();
 resetTimer();
